@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
-class FieldTaxonomy extends Model
+class FieldTaxonomy extends BaseModel
 {
     /**
      * The table associated with the model.
@@ -22,6 +22,54 @@ class FieldTaxonomy extends Model
         'nama',
         'parent_id',
     ];
+
+    /**
+     * The attributes that are searchable.
+     * 
+     * @var array<int, string>
+     */
+    protected $searchables = [
+        'nama',
+    ];
+
+    /**
+     * The columns that are sortable in the query.
+     *
+     * @var array<int, string>
+     */
+    protected $sortableColumns = [
+        'id',
+        'nama',
+        'parent_id',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * Filter the parent id.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterParentId(Builder $query, mixed $value)
+    {
+        return $query->where('parent_id', $value === "-" ? null : $value);
+    }
+
+    /**
+     * Search the parent.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function searchParent(Builder $query, mixed $value)
+    {
+        return $query->whereHas('parent', function ($query) use ($value) {
+            $query->where('nama', 'LIKE', "%{$value}%");
+        });
+    }
 
     /**
      * Get the parent field taxonomy.

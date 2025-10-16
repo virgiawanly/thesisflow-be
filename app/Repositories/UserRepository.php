@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 
-class UserRepository extends BaseRepository
+class UserRepository extends BaseResourceRepository
 {
     /**
      * Create a new repository instance.

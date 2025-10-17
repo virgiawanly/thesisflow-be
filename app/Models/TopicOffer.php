@@ -48,4 +48,14 @@ class TopicOffer extends Model
     {
         return $this->belongsTo(FieldTaxonomy::class, 'bidang_id');
     }
+
+    /**
+     * Get the submissions for the topic offer.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function submissions()
+    {
+        return $this->hasMany(ThesisSubmission::class, 'topic_offer_id');
+    }
 }

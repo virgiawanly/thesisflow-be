@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\BadRequestException;
 use App\Repositories\TopicOfferRepository;
 
 class TopicOfferService extends BaseResourceService
@@ -67,12 +68,31 @@ class TopicOfferService extends BaseResourceService
      */
     public function patchLecturerTopicOffer(int|string $lecturerId, int $id, array $payload)
     {
+        $topicOffer = $this->repository()->findLecturerTopicOffer($lecturerId, $id);
+
         $payload = array_merge($payload, [
             'lecturer_id' => $lecturerId,
             'keywords' => json_encode($payload['keywords'])
         ]);
 
-        return parent::patch($id, $payload);
+        $totalSubmittedSubmissions = $this
+            ->repository()
+            ->countTopicOfferSubmittedSubmissions($topicOffer);
+
+        if ($totalSubmittedSubmissions > 0) {
+            // Prevent bidang_id from being changed if there are submitted submissions
+            $payload['bidang_id'] = $topicOffer->bidang_id;
+        }
+
+        $totalAssignedSubmissions = $this
+            ->repository()
+            ->countTopicOfferAssignedSubmissions($topicOffer);
+
+        if ($payload['kuota'] < ($totalAssignedSubmissions)) {
+            throw new BadRequestException(__('errors.topic_offer.quota_cannot_be_less_than_assigned_submissions'));
+        }
+
+        return $topicOffer->update($payload);
     }
 
     /**
@@ -97,6 +117,16 @@ class TopicOfferService extends BaseResourceService
      */
     public function deleteLecturerTopicOffer(int|string $lecturerId, int $id)
     {
-        return $this->repository()->deleteLecturerTopicOffer($lecturerId, $id);
+        $topicOffer = $this->repository()->findLecturerTopicOffer($lecturerId, $id);
+
+        $totalSubmittedSubmissions = $this
+            ->repository()
+            ->countTopicOfferSubmittedSubmissions($topicOffer);
+
+        if ($totalSubmittedSubmissions > 0) {
+            throw new BadRequestException(__('errors.topic_offer.delete_error_has_submissions'));
+        }
+
+        return $topicOffer->delete();
     }
 }

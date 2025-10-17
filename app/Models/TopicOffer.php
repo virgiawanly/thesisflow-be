@@ -36,7 +36,7 @@ class TopicOffer extends Model
      */
     public function lecturer()
     {
-        return $this->belongsTo(Lecturer::class);
+        return $this->belongsTo(Lecturer::class, 'lecturer_id');
     }
 
     /**
@@ -46,6 +46,6 @@ class TopicOffer extends Model
      */
     public function field()
     {
-        return $this->belongsTo(FieldTaxonomy::class);
+        return $this->belongsTo(FieldTaxonomy::class, 'bidang_id');
     }
 }

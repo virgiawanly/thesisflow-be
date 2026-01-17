@@ -37,4 +37,15 @@ class UserRepository extends BaseResourceRepository
     {
         return $this->model->where('email', $email)->first();
     }
+
+    /**
+     * Find user by id.
+     *
+     * @param int $id
+     * @return \App\Models\User|null
+     */
+    public function findUserById(int $id): ?User
+    {
+        return $this->model->where('id', $id)->first();
+    }
 }

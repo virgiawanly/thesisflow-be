@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Enums\UserType;
 use App\Exceptions\InvalidCredentialsException;
 use App\Repositories\UserRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -30,9 +32,30 @@ class AuthService
             throw new InvalidCredentialsException();
         }
 
+        // If user is a student, sync student data from SIS to check the latest eligibility data
+        if ($user->type === UserType::STUDENT->value) {
+            try {
+                $syncedStudent = SISIntegrationService::syncStudentWithSIS($user->student_id);
+            } catch (ModelNotFoundException $e) {
+                throw new InvalidCredentialsException();
+            }
+
+            $user['student'] = $syncedStudent;
+        }
+
         return [
             'user' => $user,
             'token' => $user->createToken('appToken')->plainTextToken
         ];
+    }
+
+    /**
+     * Get the authenticated user profile.
+     *
+     * @return \App\Models\User
+     */
+    public function getUserProfile(int $userId)
+    {
+        return $this->userRepository->findUserById($userId);
     }
 }

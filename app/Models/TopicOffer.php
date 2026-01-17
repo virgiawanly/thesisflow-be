@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
-class TopicOffer extends Model
+class TopicOffer extends BaseModel
 {
     /**
      * The table associated with the model.
@@ -26,6 +26,27 @@ class TopicOffer extends Model
         'prasyarat',
         'kuota',
         'bidang_id',
+        'status',
+    ];
+
+    /**
+     * The attributes that are searchable in the query.
+     *
+     * @var array<int, string>
+     */
+    protected $searchables = [
+        'judul',
+        'kuota',
+    ];
+
+    /**
+     * The columns that are sortable in the query.
+     *
+     * @var array<int, string>
+     */
+    protected $sortableColumns = [
+        'judul',
+        'kuota',
         'status',
     ];
 
@@ -57,5 +78,17 @@ class TopicOffer extends Model
     public function submissions()
     {
         return $this->hasMany(ThesisSubmission::class, 'topic_offer_id');
+    }
+
+    /**
+     * Scope a query to filter topic offers by status.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function filterStatus(Builder $query, string $value)
+    {
+        return $query->where('status', $value);
     }
 }

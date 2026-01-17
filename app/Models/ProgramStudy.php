@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class ProgramStudy extends Model
+class ProgramStudy extends BaseModel
 {
     /**
      * The table associated with the model.

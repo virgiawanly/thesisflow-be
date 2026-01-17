@@ -30,7 +30,7 @@ class TopicOfferController extends BaseResourceController
      */
     public function index(Request $request)
     {
-        $result = $this->topicOfferService->getPaginatedLecturerTopicOffers(Auth::id(), $request->all(), ['field']);
+        $result = $this->topicOfferService->getPaginatedLecturerTopicOffers(Auth::user()->lecturer_id, $request->all(), ['field']);
         return ResponseHelper::data($result);
     }
 
@@ -42,7 +42,7 @@ class TopicOfferController extends BaseResourceController
      */
     public function store(CreateTopicOfferRequest $request)
     {
-        $result = $this->topicOfferService->saveLecturerTopicOffer(Auth::id(), $request->validated());
+        $result = $this->topicOfferService->saveLecturerTopicOffer(Auth::user()->lecturer_id, $request->validated());
         return ResponseHelper::success(trans('messages.successfully_created'), $result, 201);
     }
 
@@ -54,7 +54,7 @@ class TopicOfferController extends BaseResourceController
      */
     public function show(int $id)
     {
-        $result = $this->topicOfferService->findLecturerTopicOffer(Auth::id(), $id, ['field']);
+        $result = $this->topicOfferService->findLecturerTopicOffer(Auth::user()->lecturer_id, $id, ['field']);
         return ResponseHelper::data($result);
     }
 
@@ -67,7 +67,7 @@ class TopicOfferController extends BaseResourceController
      */
     public function update(UpdateTopicOfferRequest $request, int $id)
     {
-        $result = $this->topicOfferService->patchLecturerTopicOffer(Auth::id(), $id, $request->validated());
+        $result = $this->topicOfferService->patchLecturerTopicOffer(Auth::user()->lecturer_id, $id, $request->validated());
         return ResponseHelper::success(trans('messages.successfully_updated'), $result);
     }
 
@@ -79,7 +79,7 @@ class TopicOfferController extends BaseResourceController
      */
     public function destroy(int $id)
     {
-        $this->topicOfferService->deleteLecturerTopicOffer(Auth::id(), $id);
+        $this->topicOfferService->deleteLecturerTopicOffer(Auth::user()->lecturer_id, $id);
         return ResponseHelper::success(trans('messages.successfully_deleted'));
     }
 }

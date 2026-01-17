@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class ThesisSubmission extends Model
+class ThesisSubmission extends BaseModel
 {
     /**
      * The table associated with the model.
@@ -58,5 +56,15 @@ class ThesisSubmission extends Model
     public function submissionPrefs()
     {
         return $this->hasMany(SubmissionPref::class);
+    }
+
+    /**
+     * Get the eligibility snapshots for the thesis submission.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function eligibilitySnapshots()
+    {
+        return $this->hasMany(EligibilitySnapshot::class);
     }
 }

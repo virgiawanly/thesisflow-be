@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\BadRequestException;
+use App\Models\Lecturer;
 use App\Repositories\TopicOfferRepository;
 
 class TopicOfferService extends BaseResourceService

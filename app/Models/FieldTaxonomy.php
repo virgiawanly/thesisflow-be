@@ -88,6 +88,16 @@ class FieldTaxonomy extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany(FieldTaxonomy::class);
+        return $this->hasMany(FieldTaxonomy::class, 'parent_id', 'id');
+    }
+
+    /**
+     * Get all nested children field taxonomies recursively.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function nestedChildren()
+    {
+        return $this->children()->with('nestedChildren');
     }
 }

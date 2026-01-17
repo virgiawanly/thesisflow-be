@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LecturerQuota extends Model
+class LecturerQuota extends BaseModel
 {
     /**
      * The table associated with the model.

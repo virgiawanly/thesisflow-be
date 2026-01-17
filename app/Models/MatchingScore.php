@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class MatchingScore extends Model
+class MatchingScore extends BaseModel
 {
     /**
      * The table associated with the model.

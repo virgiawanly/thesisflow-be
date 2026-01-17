@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Lecturer extends Model
+class Lecturer extends BaseModel
 {
     /**
      * The table associated with the model.
@@ -45,5 +43,15 @@ class Lecturer extends Model
     public function faculty()
     {
         return $this->belongsTo(Faculty::class);
+    }
+
+    /**
+     * Get the topic offers for the lecturer.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function topicOffers()
+    {
+        return $this->hasMany(TopicOffer::class);
     }
 }
